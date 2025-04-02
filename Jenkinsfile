@@ -7,7 +7,14 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/VENKY70325/cd.git'
+                git branch: 'main', url: 'https://github.com/VENKY70325/cd.git'
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    sh "pip install -r requirements.txt"
+                }
             }
         }
         stage('Build Docker Image') {
@@ -20,7 +27,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
-                    sh "python manage.py test"
+                    sh "docker run --rm ${IMAGE_NAME} python manage.py test"
                 }
             }
         }
@@ -37,6 +44,9 @@ pipeline {
         }
     }
     post {
+        success {
+            echo "Build and Deployment Successful! 🎉"
+        }
         failure {
             echo "Build failed! Please check logs."
         }
