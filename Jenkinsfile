@@ -13,31 +13,31 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    sh "pip install -r requirements.txt"
+                    bat "pip install -r requirements.txt"
                 }
             }
         }
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "docker build -t ${IMAGE_NAME} ."
+                    bat "docker build -t %IMAGE_NAME% ."
                 }
             }
         }
         stage('Run Tests') {
             steps {
                 script {
-                    sh "docker run --rm ${IMAGE_NAME} python manage.py test"
+                    bat "docker run --rm %IMAGE_NAME% python manage.py test"
                 }
             }
         }
         stage('Run Docker Container') {
             steps {
                 script {
-                    sh '''
-                    docker stop ${CONTAINER_NAME} || true
-                    docker rm ${CONTAINER_NAME} || true
-                    docker run -d -p 8000:8000 --restart unless-stopped --name ${CONTAINER_NAME} ${IMAGE_NAME}
+                    bat '''
+                    docker stop %CONTAINER_NAME% || exit 0
+                    docker rm %CONTAINER_NAME% || exit 0
+                    docker run -d -p 8000:8000 --restart unless-stopped --name %CONTAINER_NAME% %IMAGE_NAME%
                     '''
                 }
             }
