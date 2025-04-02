@@ -1,0 +1,12 @@
+Django==4.2.7
+gunicorn==21.2.0
+psycopg2-binary==2.9.9  # Only needed if using PostgreSQL
+numpy
+pandas
+matplotlib
+scikit-learn
+seaborn
+requests
+pillow
+sqlparse
+urllib3
